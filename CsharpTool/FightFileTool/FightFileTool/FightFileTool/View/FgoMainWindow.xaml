@@ -1,0 +1,27 @@
+﻿<Window x:Class="FightFileTool.FgoMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FightFileTool"
+        mc:Ignorable="d"
+        Title="FightFileTool" Height="510" Width="610">
+    <Grid Margin="10,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="439*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="FileLoad" Content="读取" HorizontalAlignment="Left" Margin="183,10,0,0" VerticalAlignment="Top" Width="75" Height="19" />
+        <Button Content="保存" HorizontalAlignment="Left" Margin="263,10,0,0" VerticalAlignment="Top" Width="75" Height="19"/>
+        <TextBox x:Name="FileNameShow" HorizontalAlignment="Left" Margin="19,8,0,0" TextWrapping="Wrap" Text="*文件名*" Width="159" Height="21" VerticalAlignment="Top"/>
+        <Label Content="角色1技能1" Margin="19,39,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色1技能2" Margin="19,64,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色1技能3" Margin="19,89,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色2技能1" Margin="19,119,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色2技能2" Margin="19,144,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色2技能3" Margin="19,169,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色3技能1" Margin="19,199,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色3技能2" Margin="19,224,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+        <Label Content="角色3技能3" Margin="19,249,497,0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
