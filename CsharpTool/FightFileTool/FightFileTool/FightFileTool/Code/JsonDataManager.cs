@@ -26,7 +26,6 @@ namespace Code{
             public List<int> round1 ;
             public List<int> round2 ;
             public List<int> round3 ;
-
         }
         public RoundInfo info;
         internal void JsonLoad(string filename, string singlename)

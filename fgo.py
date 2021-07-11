@@ -56,7 +56,6 @@ class FgoBasic:
             for key in dict.keys(json_text):
                 col = json_text[key]
                 row.append(col)
-        print(row)
         return row
 
     def save_fight(self):
