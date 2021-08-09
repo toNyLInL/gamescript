@@ -397,5 +397,5 @@ def dict2fgobasic(dict):
 
 
 if __name__ == '__main__':
-    fgo = Fgo('settings/fgosettings5-new.json')
+    fgo = Fgo('settings/najia.json')
     fgo.repeat_fight()
