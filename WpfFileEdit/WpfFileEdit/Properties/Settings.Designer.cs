@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FightFileTool.Properties
+namespace WpfFileEdit.Properties
 {
 
 
