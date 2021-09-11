@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfFileEdit.Model;
 
 namespace WpfFileEdit
 {
@@ -23,10 +24,19 @@ namespace WpfFileEdit
         public MainWindow()
         {
             InitializeComponent();
+            apples = new List<AppleType>();
+            apples.Add(AppleType.不吃苹果);
+            apples.Add(AppleType.金苹果);
+            apples.Add(AppleType.银苹果);
+            apples.Add(AppleType.彩苹果);
 
+              
+            Apple.ItemsSource = apples; 
+            
+            
         }
-        
 
+        public List<AppleType> apples ;  
 
         private void OnFightFileLoad(object sender, RoutedEventArgs e)
         {
@@ -49,6 +59,12 @@ namespace WpfFileEdit
                     MessageBox.Show("File not support");
                 }
             }
+        }
+
+        private void Apple_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int  result = (int)Apple.SelectedItem;
+            MessageBox.Show("OnSelectedItemChanged " +result);
         }
     }
 }
