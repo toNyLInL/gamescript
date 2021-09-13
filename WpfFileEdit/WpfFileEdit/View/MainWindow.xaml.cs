@@ -21,9 +21,12 @@ namespace WpfFileEdit
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+            CheckFolderExist();
+            JsonModel userdata = new JsonModel();
             apples = new List<AppleType>();
             apples.Add(AppleType.不吃苹果);
             apples.Add(AppleType.金苹果);
@@ -31,8 +34,14 @@ namespace WpfFileEdit
             apples.Add(AppleType.彩苹果);
 
               
+
             Apple.ItemsSource = apples; 
             
+            
+        }
+
+        private void CheckFolderExist()
+        {
             
         }
 
@@ -52,7 +61,7 @@ namespace WpfFileEdit
                 FileNameShow.Text = filename;
                 if (filename.EndsWith(".json"))
                 {
-                    
+                    filepath = fullpath;
                 }
                 else
                 {
@@ -65,6 +74,13 @@ namespace WpfFileEdit
         {
             int  result = (int)Apple.SelectedItem;
             MessageBox.Show("OnSelectedItemChanged " +result);
+        }
+
+        private string filepath;
+
+        private void SaveFile(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
