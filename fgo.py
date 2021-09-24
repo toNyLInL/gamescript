@@ -23,22 +23,12 @@ class FgoBasic:
     round_wait_time: 三面释放宝具后等待时间
     emulator_name: 模拟器窗口名称
     use_rand_time: 使用随机延迟时间
-<<<<<<< HEAD
-    fightfile: 读取战斗按键序列的位置
-    fight_list: 战斗按键序列
-=======
     fight: 按键序列
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
     count_character: 检测助战角色拖动界面次数
-    attack_in_advance:预先攻击敌方角色（俗称垫刀）
     """
 
     def __init__(self, repeat_num, apple, character, equipment, wait_time, delay_time,
-<<<<<<< HEAD
-                 fight_turn, side_wait_time, emulator_name, use_rand_time,change_character,fightfile,attack_in_advance ):
-=======
                  fight_turn, round_wait_time, emulator_name, use_rand_time, change_character, fight):
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
         self.repeat_num = repeat_num
         self.apple = apple
         self.character = character
@@ -49,33 +39,9 @@ class FgoBasic:
         self.round_wait_time = round_wait_time
         self.emulator = emulator.Emulator(emulator_name, fgo_dict.keyboard_key, fgo_dict.mouse_key, use_rand_time)
         self.change_character = change_character
-<<<<<<< HEAD
-        self.fightfile = fightfile
-        self.fight_list = self.read_fight()
-=======
         self.fight = fight
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
         self.count_character = 0
-        self.attack_in_advance = attack_in_advance               
 
-<<<<<<< HEAD
-    def read_fight(self):
-        fight_text = codecs.open(self.fightfile, 'r', encoding='utf-8').read()
-        json_text = json.load(open(self.fightfile))# dict
-        for i in range(self.fight_turn):
-            row = []
-            for key in dict.keys(json_text):
-                col = json_text[key]
-                row.append(col)
-        return row
-
-    def save_fight(self):
-        fight_text = self.fight_list.tolist()
-        json.dump(fight_text, codecs.open(self.fight, 'w', encoding='utf-8'),
-                  separators=(',', ':'), sort_keys=True, indent=4)
-
-=======
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
 
 class Fgo:
     """
@@ -205,12 +171,6 @@ class Fgo:
             self.character_skill(fight_round, operation)
         return None
 
-<<<<<<< HEAD
-    def fight_change_character(self, side):
-        """
-        变更角色并对变更角色技能进行使用
-        """
-=======
     def skill_check(self, fight_round, operation):
         if self.fgo_settings.fight[fight_round]["skill"][operation]["button"] == "T" or \
                 self.fgo_settings.fight[fight_round]["skill"][operation]["button"] == "U" or\
@@ -220,7 +180,6 @@ class Fgo:
             self.character_skill(fight_round, operation)
 
     def fight_change_character(self, fight_round, operation):
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
         self.fgo_settings.emulator.press_mouse_key('S', 0.5 + self.fgo_settings.delay_time)
         if self.fgo_settings.change_character[1] > 3 or self.fgo_settings.change_character[1] < 1 \
                 or self.fgo_settings.change_character[2] > 6 or self.fgo_settings.change_character[2] < 4:
@@ -269,33 +228,6 @@ class Fgo:
     def set_fight(self):
         for battle in range(self.fgo_settings.fight_turn):
             self.logger.get_log().debug('开始第' + str(battle + 1) + '面的战斗')
-<<<<<<< HEAD
-            time.sleep(self.fgo_settings.delay_time+1.0)
-            for i in range(9):
-                self.character_skill(battle, i)
-            for i in range(3):
-                self.master_skill(battle, i + 9)
-            if battle == self.fgo_settings.attack_in_advance-1:
-                self.fgo_settings.emulator.press_mouse_key("1",3+self.fgo_settings.delay_time)
-                self.fgo_settings.emulator.press_mouse_key('J',3+ self.fgo_settings.delay_time)
-                self.rand_card(2)
-                num_spell_card=2
-                for i in range(3):
-                    num_spell_card+=self.spell_card(battle,i+15)
-                if num_spell_card == 3:
-                    self.logger.get_log().debug("垫刀success")
-                
-            
-            else:
-                num_spell_card = 0
-                self.fgo_settings.emulator.press_mouse_key('J', 3 + self.fgo_settings.delay_time)
-            
-                for i in range(3):
-                    num_spell_card+=self.spell_card(battle,i + 15 )
-                self.rand_card(3-num_spell_card)
-
-            time.sleep(self.fgo_settings.side_wait_time[battle])
-=======
             fight_round = "fight_round" + str(battle+1)
             for i in range(len(self.fgo_settings.fight[fight_round]["skill"])):
                 operation = "operation" + str(i+1)
@@ -307,7 +239,6 @@ class Fgo:
                 self.spell_card(fight_round, operation)
             self.rand_card(3 - num_attack_card)
             time.sleep(self.fgo_settings.round_wait_time[battle])
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
         for i in range(5):
             self.fgo_settings.emulator.press_mouse_key('4', 1 + self.fgo_settings.delay_time)
         self.logger.get_log().debug('战斗结束')
@@ -432,8 +363,7 @@ def fgobasic2dict(fgobasic):
         'change_character': fgobasic.change_character,
         "emulator_name": fgobasic.emulator.name,
         'use_rand_time': fgobasic.emulator.use_rand_time,
-        'fight': fgobasic.fight,
-        'attack_in_advance':fgobasic.attack_in_advance
+        'fight': fgobasic.fight
     }
 
 
@@ -450,15 +380,10 @@ def dict2fgobasic(dict):
         dict['emulator_name'],
         dict['use_rand_time'],
         dict['change_character'],
-        dict['fight'],
-        dict['attack_in_advance']
+        dict['fight']
     )
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    fgo = Fgo('settings/najia.json')
-=======
     fgo = Fgo('settings/fgo1.json')
->>>>>>> 6e358e5a76dbce6162b2d218b19289bcb385feaf
     fgo.repeat_fight()
