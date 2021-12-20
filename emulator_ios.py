@@ -8,7 +8,7 @@ import win32print
 import win32ui
 import cv2 as cv
 import numpy as np
-import fgo_dict
+import fgo_dict_ios
 
 
 class Emulator:
@@ -35,7 +35,7 @@ class Emulator:
         self.name = name
         self.parent = 0
         self.handle = 0
-        self.get_handle()
+        self.get_handle(name)
         self.use_rand_time = use_rand_time
         self.keyboard_dict = keyboard_dict
         self.mouse_dict = mouse_dict
@@ -45,28 +45,27 @@ class Emulator:
         self.resolution = 0
         self.get_resolution()
 
-    def get_handle(self):
+    def get_handle(self, name):
         """get handle of execute program"""
-        self.parent = win32gui.FindWindow(None, self.name)
+        self.parent = win32gui.FindWindow(None, name)
         if self.parent == 0:
-            self.logger.get_log().error('错误的窗口句柄！无法找到' + self.name)
+            self.logger.get_log().error('错误的窗口句柄！无法找到' + name)
             return False
-        if self.name == '雷电模拟器':
-            self.get_child_windows()
-        else:
-            self.logger.get_log().warn('目前不支持该模拟器，不能保证没有问题')
-            self.get_child_windows()
+        self.handle = self.parent    
+        self.get_child_windows()
         return None
 
     def get_child_windows(self):
-        """get child handle"""
+        """get child handle if exist"""
         if self.parent == 0:
             self.logger.get_log().error('寻找子句柄出错')
             return False
         hwndChildList = []
         win32gui.EnumChildWindows(self.parent, lambda hwnd, param: param.append(hwnd), hwndChildList)
-        self.logger.get_log().debug('窗口子句柄为:' + str(hwndChildList[0]))
-        self.handle = hwndChildList[0]
+        if(len(hwndChildList)!=0):
+            self.logger.get_log().debug('窗口子句柄为:' + str(hwndChildList[0]))
+            self.handle = hwndChildList[0]
+        
         return None
 
     def get_resolution(self):
@@ -120,7 +119,7 @@ class Emulator:
         p_position = win32api.MAKELONG(point_x, point_y)
         win32api.SendMessage(self.handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
         win32api.SendMessage(self.handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, p_position)
-        time.sleep(0.2)
+        time.sleep(0.5)
         win32api.SendMessage(self.handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, p_position)
         time.sleep(delay_time + self.rand_time())
         return None
@@ -161,7 +160,7 @@ class Emulator:
         template = cv.imread(template_pic)
         size = template.shape
         target = cv.imread(check_pic)
-        target = cv.resize(target, (self.mouse_dict['width'], self.mouse_dict['height']))
+        #target = cv.resize(target, (self.mouse_dict['width'], self.mouse_dict['height']))
         if check_area != 0:
             target = target[check_area[0]:check_area[1], check_area[2]:check_area[3]]
 
@@ -179,6 +178,3 @@ class Emulator:
         return pos_list
 
 
-if __name__ == '__main__':
-    a = Emulator('雷电模拟器', fgo_dict.keyboard_key, fgo_dict.mouse_key, 1)
-    a.get_bitmap()

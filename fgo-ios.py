@@ -1,5 +1,5 @@
-import fgo_dict
-import emulator
+import fgo_dict_ios
+import emulator_ios as eml
 import logger
 import json
 import random
@@ -37,7 +37,7 @@ class FgoBasic:
         self.delay_time = delay_time
         self.fight_turn = fight_turn
         self.round_wait_time = round_wait_time
-        self.emulator = emulator.Emulator(emulator_name, fgo_dict.keyboard_key, fgo_dict.mouse_key, use_rand_time)
+        self.emulator = eml.Emulator(emulator_name, fgo_dict_ios.keyboard_key, fgo_dict_ios.mouse_key, use_rand_time)
         self.change_character = change_character
         self.fight = fight
         self.count_character = 0
@@ -49,7 +49,7 @@ class Fgo:
     """
 
     def __init__(self, settings_name):
-        with open(settings_name, 'r') as f_read:
+        with open(settings_name, 'r',encoding='UTF-8') as f_read:
             self.fgo_settings = dict2fgobasic(json.load(f_read))
         self.logger = logger.Logger(__name__)
 
@@ -73,17 +73,17 @@ class Fgo:
     def continue_attack(self, action):
         """check whether continue attacking"""
         if not action:
-            self.fgo_settings.emulator.press_mouse_key('E', 5 + self.fgo_settings.delay_time)
+            self.fgo_settings.emulator.press_mouse_key('E', 3 + self.fgo_settings.delay_time)
         else:
-            self.fgo_settings.emulator.press_mouse_key('H', 5 + self.fgo_settings.delay_time)
+            self.fgo_settings.emulator.press_mouse_key('H', 3 + self.fgo_settings.delay_time)
         return None
 
     def check_apple(self):
         """check whether eat apple"""
         self.logger.get_log().debug('判断是否进入吃苹果界面')
         self.fgo_settings.emulator.get_bitmap()
-        result1 = self.fgo_settings.emulator.template_matching('img_check.bmp', 'source/apple.jpg', 0.9, 0)
-        result2 = self.fgo_settings.emulator.template_matching('img_check.bmp', 'source/assist.jpg', 0.9, 0)
+        result1 = self.fgo_settings.emulator.template_matching('img_check.bmp', 'source/ios-apple.jpg', 0.9, 0)
+        result2 = self.fgo_settings.emulator.template_matching('img_check.bmp', 'source/ios-assist.jpg', 0.9, 0)
         if result1.size:
             self.logger.get_log().debug('已进入吃苹果判断界面')
             if self.fgo_settings.apple == 1:
@@ -96,8 +96,8 @@ class Fgo:
                 self.fgo_settings.emulator.press_mouse_key('H', 2 + self.fgo_settings.delay_time)
             elif self.fgo_settings.apple == 3:
                 self.logger.get_log().debug('吃铜苹果')
-                self.fgo_settings.emulator.slide_mouse('up1', 'up2', 1.5 + self.fgo_settings.delay_time)
-                self.fgo_settings.emulator.press_mouse_key('P', 1 + self.fgo_settings.delay_time)
+                self.fgo_settings.emulator.slide_mouse('up3', 'up4', 1.5 + self.fgo_settings.delay_time)
+                self.fgo_settings.emulator.press_mouse_key('broneApple', 1 + self.fgo_settings.delay_time)
                 self.fgo_settings.emulator.press_mouse_key('H', 2 + self.fgo_settings.delay_time)
             elif self.fgo_settings.apple == 1000:
                 self.logger.get_log().debug('吃彩苹果')
@@ -195,14 +195,14 @@ class Fgo:
             + self.fgo_settings.delay_time)
         self.logger.get_log().debug('角色' + str(self.fgo_settings.change_character[2]) +
                                     '更换角色' + str(self.fgo_settings.change_character[1]))
-
-    def spell_card(self, fight_round, operation):
         """
         释放宝具
         :param fight_round: 战斗面数
         :param operation: 操作编号
         :return: 宝具释放次数
         """
+    def spell_card(self, fight_round, operation):
+
         if self.fgo_settings.fight[fight_round]["attack"][operation]["object"] == 0:
             return 0
         else:
@@ -233,7 +233,8 @@ class Fgo:
                 operation = "operation" + str(i+1)
                 self.skill_check(fight_round, operation)
             num_attack_card = len(self.fgo_settings.fight[fight_round]["attack"])
-            self.fgo_settings.emulator.press_mouse_key('J', 3 + self.fgo_settings.delay_time)
+            time.sleep(1.5)
+            self.fgo_settings.emulator.press_mouse_key('J', 2 + self.fgo_settings.delay_time)
             for i in range(num_attack_card):
                 operation = "operation" + str(i+1)
                 self.spell_card(fight_round, operation)
@@ -287,7 +288,7 @@ class Fgo:
             if assist_pos[i][3] + 20 > 720:
                 continue
             equip_pos = self.fgo_settings.emulator.template_matching(
-                'img_check.bmp', 'source/' + self.fgo_settings.equipment + '.jpg', 0.95,
+                'img_check.bmp', 'source/' + self.fgo_settings.equipment + '.jpg', 0.9,
                 [assist_pos[i][2], assist_pos[i][3] + 20, assist_pos[i][0] - 220, assist_pos[i][0]])
             if equip_pos.size == 0:
                 continue
@@ -313,7 +314,7 @@ class Fgo:
                 return None
             else:
                 self.fgo_settings.count_character = 0
-                assist_pos = self.find_assist(self.fgo_settings.equipment, 0.95)
+                assist_pos = self.find_assist(self.fgo_settings.equipment, 0.9)
         else:
             self.fgo_settings.count_character = 0
             assist_pos = self.find_assist(self.fgo_settings.character, 0.9)
@@ -385,5 +386,5 @@ def dict2fgobasic(dict):
 
 
 if __name__ == '__main__':
-    fgo = Fgo('settings/fgo1.json')
+    fgo = Fgo('settings/fgo4.json')
     fgo.repeat_fight()
